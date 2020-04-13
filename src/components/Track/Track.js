@@ -27,10 +27,10 @@ class Track extends React.Component{
     this.props.onRemove(this.props.track);
   }
 
-//Purpose show ms in minutes and seconds
+//Purpose show the duration given in ms as minutes and seconds
   convertTime(){
     var d = new Date(this.props.track.duration);
-    return ( d.getUTCMinutes() + ':' + d.getUTCSeconds() ); // "4:59"
+    return ( d.toISOString().slice(14,-5)); // "4:59"
   }
 
   render(){

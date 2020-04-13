@@ -30,7 +30,7 @@ Spotify.search=(term)=>{
        }
      ).then(
        jsonResponse =>{
-         if (jsonResponse.tracks){
+         if (jsonResponse.tracks){          
            return jsonResponse.tracks.items.map(track => {
              return {
                id: track.id,
@@ -38,7 +38,8 @@ Spotify.search=(term)=>{
                album: track.album.name,
                name: track.name,
                URI: track.uri, 
-               duration: track.duration_ms
+               duration: track.duration_ms,
+               link: track.href
              }
            })
          }
@@ -65,7 +66,8 @@ Spotify.audioFeatures=(tracks)=>{
                album: track.album.name,
                name: track.name,
                URI: track.uri, 
-               duration: track.duration_ms
+               duration: track.duration_ms,
+               link:track.href
              }
            })
          }

@@ -25,7 +25,7 @@ class SearchBar extends React.Component{
 
 //Purpose:  allow pressing enter to search
   keyPress(e){
-    if(e.keyCode == 13){
+    if(e.keyCode === 13){
       this.search();
     }
   }
