@@ -1,5 +1,5 @@
 const clientID ="e7089f671bcf466cadac8945320843cb";
-const uriRedirect ="hovermeyer.github.io/jammming/"
+const uriRedirect ="https://hovermeyer.github.io/jammming/"
 let accessToken ='';
 
 let Spotify= {};
