@@ -37,7 +37,35 @@ Spotify.search=(term)=>{
                artist: track.artists[0].name,
                album: track.album.name,
                name: track.name,
-               URI: track.uri
+               URI: track.uri, 
+               duration: track.duration_ms
+             }
+           })
+         }
+
+       }
+     )
+
+}
+
+//Purpose: use Spotify API to get audio details for a number of tracks
+Spotify.audioFeatures=(tracks)=>{
+  return fetch(`"https://api.spotify.com/v1/audio-features/?ids=${tracks.join(",")}`,
+     {headers:{Authorization:`Bearer ${Spotify.getAccessToken()}`}}).then(
+       response =>{
+           return  response.json();
+       }
+     ).then(
+       jsonResponse =>{
+         if (jsonResponse.tracks){
+           return jsonResponse.tracks.items.map(track => {
+             return {
+               id: track.id,
+               artist: track.artists[0].name,
+               album: track.album.name,
+               name: track.name,
+               URI: track.uri, 
+               duration: track.duration_ms
              }
            })
          }

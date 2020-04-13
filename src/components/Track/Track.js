@@ -22,9 +22,15 @@ class Track extends React.Component{
   addTrack(){
     this.props.onAdd(this.props.track);
   }
-//Purpose: removve a track
+//Purpose: remove a track
   removeTrack(){
     this.props.onRemove(this.props.track);
+  }
+
+//Purpose show ms in minutes and seconds
+  convertTime(){
+    var d = new Date(this.props.track.duration);
+    return ( d.getUTCMinutes() + ':' + d.getUTCSeconds() ); // "4:59"
   }
 
   render(){
@@ -32,7 +38,7 @@ class Track extends React.Component{
       <div className="Track">
         <div className="Track-information">
           <h3>{this.props.track.name}</h3>
-          <p>{this.props.track.artist} | {this.props.track.album}</p>
+          <p>{this.props.track.artist} | {this.props.track.album} | {this.convertTime()}</p>
         </div>
         {this.renderAction()}
       </div>
