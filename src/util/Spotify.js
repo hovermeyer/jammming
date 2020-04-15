@@ -1,5 +1,7 @@
 const clientID ="e7089f671bcf466cadac8945320843cb";
-const uriRedirect ="https://hovermeyer.github.io/jammming/"
+//const uriRedirect ="https://hovermeyer.github.io/jammming/"
+const uriRedirect ="http://localhost:3000/"
+
 let accessToken ='';
 
 let Spotify= {};
@@ -49,9 +51,9 @@ Spotify.search=(term)=>{
 
 }
 
-//Purpose: use Spotify API to get audio details for a number of tracks
-Spotify.audioFeatures=(tracks)=>{
-  return fetch(`"https://api.spotify.com/v1/audio-features/?ids=${tracks.join(",")}`,
+//Purpose: use Spotify API to get recommendations based on current playlist (first 5 only)
+Spotify.recommedations=(searchTerm)=>{
+  return fetch(`https://api.spotify.com/v1/recommendations?${searchTerm}`,
      {headers:{Authorization:`Bearer ${Spotify.getAccessToken()}`}}).then(
        response =>{
            return  response.json();
@@ -59,7 +61,7 @@ Spotify.audioFeatures=(tracks)=>{
      ).then(
        jsonResponse =>{
          if (jsonResponse.tracks){
-           return jsonResponse.tracks.items.map(track => {
+           return jsonResponse.tracks.map(track => {
              return {
                id: track.id,
                artist: track.artists[0].name,

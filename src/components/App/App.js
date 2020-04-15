@@ -18,6 +18,7 @@ class App extends React.Component{
     this.updatePlaylistName= this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
+    this.recommendations = this.recommendations.bind(this);
   }
 
 //Purpose: add a track to the playlist
@@ -57,6 +58,15 @@ class App extends React.Component{
    Spotify.search(searchTerm).then(searchResults =>{this.setState({searchResults:searchResults})});
  }
 
+
+ //Purpose: allow to search based on tracks added to the playlist
+ recommendations(){
+  let seedTracks = this.state.playlistTracks.map(track=>{return track.id}).slice(0,5).join(',')
+  let searchTerms =(`seed_tracks=${seedTracks}`)
+
+  Spotify.recommedations(searchTerms).then(searchResults =>{this.setState({searchResults:searchResults})});
+ }
+
  render(){
   return (<div>
     <h1>Ja<span className="highlight">mmm</span>ing</h1>
@@ -67,6 +77,7 @@ class App extends React.Component{
         <Playlist onNameChange= {this.updatePlaylistName}
                   onRemove = {this.removeTrack}
                   onSave ={this.savePlaylist}
+                  onSearch ={this.recommendations}
                   playlistName={this.state.playlistName}
                   playlistTracks = {this.state.playlistTracks} />
       </div>
