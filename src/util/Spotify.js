@@ -1,6 +1,6 @@
 const clientID ="e7089f671bcf466cadac8945320843cb";
-//const uriRedirect ="https://hovermeyer.github.io/jammming/"
-const uriRedirect ="http://localhost:3000/"
+const uriRedirect ="https://hovermeyer.github.io/jammming/"
+//const uriRedirect ="http://localhost:3000/"
 
 let accessToken ='';
 
