@@ -2,6 +2,9 @@ import React from "react"
 import SearchBar from "../SearchBar/SearchBar.js"
 import SearchResults from "../SearchResults/SearchResults.js"
 import Playlist from "../Playlist/Playlist.js"
+import PlaylistList from "../PlaylistList/PlaylistList.js"
+
+
 import Spotify from "../../util/Spotify.js"
 import "./App.css"
 
@@ -12,13 +15,18 @@ class App extends React.Component{
     super(props);
     this.state = {searchResults :[],
     playlistName: "My Playlist Name Test",
-    playlistTracks : []}
+    playlistTracks : [],
+    playlists:this.getPlaylists(),
+    advancedSearchVisible:false}
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack =this.removeTrack.bind(this);
     this.updatePlaylistName= this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
     this.recommendations = this.recommendations.bind(this);
+    this.advancedSearch = this.advancedSearch.bind(this);
+    this.getPlaylists = this.getPlaylists.bind(this);
+    this.loadPlaylist = this.loadPlaylist.bind(this)
   }
 
 //Purpose: add a track to the playlist
@@ -50,6 +58,7 @@ class App extends React.Component{
  savePlaylist(){
    let trackURIs = this.state.playlistTracks.map(track => {return track.URI})
    Spotify.savePlaylist(this.state.playlistName, trackURIs)
+   //I probably want to load them here after save to spotify
  }
 
 
@@ -58,6 +67,22 @@ class App extends React.Component{
    Spotify.search(searchTerm).then(searchResults =>{this.setState({searchResults:searchResults})});
  }
 
+ //Purpose: show advanced search options or not
+ advancedSearch(){
+   let newVisible = !(this.state.advancedSearchVisible);
+   this.setState({advancedSearchVisible:newVisible});
+ }
+
+ getPlaylists(){
+   Spotify.getPlaylists().then(playlists=>{this.setState({playlists:playlists})});
+ }
+
+ loadPlaylist(playlistInfo){
+  Spotify.loadPlaylist(playlistInfo.id).then(playlist=>{
+    this.setState({playlistTracks: playlist, playlistName: playlistInfo.name})})
+  
+
+ }
 
  //Purpose: allow to search based on tracks added to the playlist
  recommendations(){
@@ -71,15 +96,25 @@ class App extends React.Component{
   return (<div>
     <h1>Ja<span className="highlight">mmm</span>ing</h1>
     <div className="App">
-      <SearchBar onSearch = {this.search}/>
+      <SearchBar onSearch = {this.search} 
+                 onAdvancedSearch = {this.advancedSearch}
+                 advancedSearchVisible ={this.state.advancedSearchVisible}/>
       <div className="App-playlist">
+        <PlaylistList playlists = {this.state.playlists}  
+                      loadPlaylist = {this.loadPlaylist}/>
+
         <SearchResults onAdd = {this.addTrack} searchResults = {this.state.searchResults} />
         <Playlist onNameChange= {this.updatePlaylistName}
                   onRemove = {this.removeTrack}
                   onSave ={this.savePlaylist}
                   onSearch ={this.recommendations}
                   playlistName={this.state.playlistName}
-                  playlistTracks = {this.state.playlistTracks} />
+                  playlistTracks = {this.state.playlistTracks} 
+                  />
+
+      </div>
+      <div className="App-playlist">
+
       </div>
     </div>
   </div>)

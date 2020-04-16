@@ -51,6 +51,62 @@ Spotify.search=(term)=>{
 
 }
 
+
+//Purpose: use Spotify API to get user's playlist
+Spotify.getPlaylists=()=>{
+  return fetch(`https://api.spotify.com/v1/me/playlists`,
+     {headers:{Authorization:`Bearer ${Spotify.getAccessToken()}`}}).then(
+       response =>{
+           return  response.json();
+       }
+     ).then(
+       jsonResponse =>{
+         if (jsonResponse.items){
+           return jsonResponse.items.map(playlist => {
+             return {
+               id: playlist.id,
+               name: playlist.name,
+               totalTracks: playlist.tracks.total,
+               URI: playlist.uri, 
+             }
+           })
+         }
+
+       }
+     )
+
+}
+
+
+//Purpose: use Spotify API to get tracks from a specific playlist
+Spotify.loadPlaylist=(playlist)=>{
+  return fetch(` https://api.spotify.com/v1/playlists/${playlist}`,
+     {headers:{Authorization:`Bearer ${Spotify.getAccessToken()}`}}).then(
+       response =>{
+           return  response.json();
+       }
+     ).then(
+       jsonResponse =>{
+         console.log(jsonResponse)
+         if (jsonResponse.tracks){
+           return jsonResponse.tracks.items.map(item => {
+             return {
+              id: item.track.id,
+              artist: item.track.artists[0].name,
+              album: item.track.album.name,
+              name: item.track.name,
+              URI: item.track.uri, 
+              duration: item.track.duration_ms,
+              link: item.track.href
+             }
+           })
+         }
+
+       }
+     )
+
+}
+
 //Purpose: use Spotify API to get recommendations based on current playlist (first 5 only)
 Spotify.recommedations=(searchTerm)=>{
   return fetch(`https://api.spotify.com/v1/recommendations?${searchTerm}`,
